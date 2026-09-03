@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as RankedRouteImport } from './routes/ranked'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as TournamentsIndexRouteImport } from './routes/tournaments.index'
 import { Route as TournamentsSlugRouteImport } from './routes/tournaments.$slug'
 
@@ -36,6 +37,11 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TournamentsIndexRoute = TournamentsIndexRouteImport.update({
   id: '/tournaments/',
   path: '/tournaments/',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ranked': typeof RankedRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/tournaments/$slug': typeof TournamentsSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/tournaments/': typeof TournamentsIndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ranked': typeof RankedRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/tournaments/$slug': typeof TournamentsSlugRoute
   '/blog': typeof BlogIndexRoute
   '/tournaments': typeof TournamentsIndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ranked': typeof RankedRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/tournaments/$slug': typeof TournamentsSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/tournaments/': typeof TournamentsIndexRoute
@@ -78,17 +87,25 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/ranked'
+    | '/blog/$slug'
     | '/tournaments/$slug'
     | '/blog/'
     | '/tournaments/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/auth' | '/ranked' | '/tournaments/$slug' | '/blog' | '/tournaments'
+    | '/'
+    | '/auth'
+    | '/ranked'
+    | '/blog/$slug'
+    | '/tournaments/$slug'
+    | '/blog'
+    | '/tournaments'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/ranked'
+    | '/blog/$slug'
     | '/tournaments/$slug'
     | '/blog/'
     | '/tournaments/'
@@ -98,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   RankedRoute: typeof RankedRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   TournamentsSlugRoute: typeof TournamentsSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   TournamentsIndexRoute: typeof TournamentsIndexRoute
@@ -133,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tournaments/': {
       id: '/tournaments/'
       path: '/tournaments'
@@ -154,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   RankedRoute: RankedRoute,
+  BlogSlugRoute: BlogSlugRoute,
   TournamentsSlugRoute: TournamentsSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   TournamentsIndexRoute: TournamentsIndexRoute,
