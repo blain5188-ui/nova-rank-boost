@@ -48,7 +48,7 @@ function Dashboard() {
 
   const saveEpic = async () => {
     const { error } = await supabase.from("profiles").update({ epic_name: epic }).eq("id", user!.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await refreshProfile();
     toast.success("Nome Epic aggiornato");
   };
@@ -131,7 +131,7 @@ function AdminPanel() {
       prize_cents: Math.round(Number(t.prize) * 100) || 0,
       published,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(published ? "Torneo pubblicato" : "Torneo salvato come bozza");
     setT({ title: "", slug: "", description: "", prize: "0" });
     void qc.invalidateQueries({ queryKey: ["admin-tournaments"] });
@@ -139,20 +139,20 @@ function AdminPanel() {
   };
 
   const createTeam = async () => {
-    if (!team.tournament_id) return toast.error("Seleziona un torneo");
+    if (!team.tournament_id) { toast.error("Seleziona un torneo"); return; }
     const { error } = await supabase.from("teams").insert({
       tournament_id: team.tournament_id,
       name: team.name,
       tag: team.tag,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Squadra creata");
     setTeam({ tournament_id: team.tournament_id, name: "", tag: "" });
   };
 
   const createPost = async (published: boolean) => {
     const { error } = await supabase.from("blog_posts").insert({ ...post, published });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(published ? "Articolo pubblicato" : "Bozza salvata");
     setPost({ title: "", slug: "", category: "news", excerpt: "", body: "" });
     void qc.invalidateQueries({ queryKey: ["blog-posts"] });
