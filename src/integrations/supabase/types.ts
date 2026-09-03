@@ -16,7 +16,9 @@ export type Database = {
     Tables: {
       blog_posts: {
         Row: {
+          author: string | null
           body: string | null
+          category: string
           cover_url: string | null
           excerpt: string | null
           id: string
@@ -26,7 +28,9 @@ export type Database = {
           title: string
         }
         Insert: {
+          author?: string | null
           body?: string | null
+          category?: string
           cover_url?: string | null
           excerpt?: string | null
           id?: string
@@ -36,7 +40,9 @@ export type Database = {
           title: string
         }
         Update: {
+          author?: string | null
           body?: string | null
+          category?: string
           cover_url?: string | null
           excerpt?: string | null
           id?: string
@@ -191,6 +197,85 @@ export type Database = {
         }
         Relationships: []
       }
+      team_players: {
+        Row: {
+          created_at: string
+          display_name: string
+          epic_name: string | null
+          id: string
+          role: string | null
+          team_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          epic_name?: string | null
+          id?: string
+          role?: string | null
+          team_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          epic_name?: string | null
+          id?: string
+          role?: string | null
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_players_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string
+          id: string
+          losses: number
+          name: string
+          points: number
+          tag: string | null
+          tournament_id: string
+          updated_at: string
+          wins: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          losses?: number
+          name: string
+          points?: number
+          tag?: string | null
+          tournament_id: string
+          updated_at?: string
+          wins?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          losses?: number
+          name?: string
+          points?: number
+          tag?: string | null
+          tournament_id?: string
+          updated_at?: string
+          wins?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tournament_entries: {
         Row: {
           created_at: string
@@ -229,6 +314,70 @@ export type Database = {
           },
         ]
       }
+      tournament_matches: {
+        Row: {
+          created_at: string
+          id: string
+          round: number
+          scheduled_at: string
+          score_a: number
+          score_b: number
+          status: Database["public"]["Enums"]["match_status"]
+          team_a_id: string | null
+          team_b_id: string | null
+          tournament_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          round?: number
+          scheduled_at?: string
+          score_a?: number
+          score_b?: number
+          status?: Database["public"]["Enums"]["match_status"]
+          team_a_id?: string | null
+          team_b_id?: string | null
+          tournament_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          round?: number
+          scheduled_at?: string
+          score_a?: number
+          score_b?: number
+          status?: Database["public"]["Enums"]["match_status"]
+          team_a_id?: string | null
+          team_b_id?: string | null
+          tournament_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tournament_matches_team_a_id_fkey"
+            columns: ["team_a_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tournament_matches_team_b_id_fkey"
+            columns: ["team_b_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tournament_matches_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tournaments: {
         Row: {
           created_at: string
@@ -238,6 +387,7 @@ export type Database = {
           max_entries: number
           mode: Database["public"]["Enums"]["game_mode"]
           prize_cents: number
+          published: boolean
           region: string
           size: Database["public"]["Enums"]["team_size"]
           slug: string
@@ -253,6 +403,7 @@ export type Database = {
           max_entries?: number
           mode?: Database["public"]["Enums"]["game_mode"]
           prize_cents?: number
+          published?: boolean
           region?: string
           size?: Database["public"]["Enums"]["team_size"]
           slug: string
@@ -268,6 +419,7 @@ export type Database = {
           max_entries?: number
           mode?: Database["public"]["Enums"]["game_mode"]
           prize_cents?: number
+          published?: boolean
           region?: string
           size?: Database["public"]["Enums"]["team_size"]
           slug?: string
